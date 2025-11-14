@@ -53,8 +53,10 @@ if csv_file and excel_template:
         for r_idx, row in enumerate(dataframe_to_rows(formatted_data, index=False, header=False), 20):
             for c_idx, value in enumerate(row, 2):
                 cell = ws.cell(row=r_idx, column=c_idx)
-                if not isinstance(cell, type(ws.cell(1,1))):  # avoid merged cell errors
+                # Only write if the cell is not merged or it's the top-left of a merged range
+                if not isinstance(cell, openpyxl.cell.cell.MergedCell):
                     cell.value = value
+
 
         # Merge cells for element description
         for i in range(0, len(formatted_rows), 2):
